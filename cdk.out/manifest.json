@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-ap-northeast-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-ap-northeast-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-1/8ad9c5fb50ab7667c85cd0b521193fc62d7832945f3ff8e0a3212d3a4c7d5a3b.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-1/621a8d34b45a5dd7ef5da817379eebd352ab8e14cf0139e2f558a94daae0b25e.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -254,6 +254,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "WEB3souLogBucketPolicy345A6A0F"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatchingCloudFront/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingCloudFront1DFD97BC"
           }
         ],
         "/FaceMatchingStack/CDKMetadata/Default": [

@@ -780,13 +780,6 @@
                       {
                         "cidrIp": "0.0.0.0/0",
                         "ipProtocol": "tcp",
-                        "fromPort": 443,
-                        "toPort": 443,
-                        "description": "from 0.0.0.0/0:443"
-                      },
-                      {
-                        "cidrIp": "0.0.0.0/0",
-                        "ipProtocol": "tcp",
                         "fromPort": 5000,
                         "toPort": 5000,
                         "description": "from 0.0.0.0/0:5000"
@@ -1206,6 +1199,81 @@
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.126.0"
+            }
+          },
+          "FaceMatchingCloudFront": {
+            "id": "FaceMatchingCloudFront",
+            "path": "FaceMatchingStack/FaceMatchingCloudFront",
+            "children": {
+              "Origin1": {
+                "id": "Origin1",
+                "path": "FaceMatchingStack/FaceMatchingCloudFront/Origin1",
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "FaceMatchingStack/FaceMatchingCloudFront/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudFront::Distribution",
+                  "aws:cdk:cloudformation:props": {
+                    "distributionConfig": {
+                      "enabled": true,
+                      "origins": [
+                        {
+                          "domainName": {
+                            "Fn::GetAtt": [
+                              "FaceMatchingALB9EF8E688",
+                              "DNSName"
+                            ]
+                          },
+                          "id": "FaceMatchingStackFaceMatchingCloudFrontOrigin12EA1582B",
+                          "customOriginConfig": {
+                            "originSslProtocols": [
+                              "TLSv1.2"
+                            ],
+                            "originProtocolPolicy": "http-only"
+                          }
+                        }
+                      ],
+                      "defaultCacheBehavior": {
+                        "pathPattern": "*",
+                        "targetOriginId": "FaceMatchingStackFaceMatchingCloudFrontOrigin12EA1582B",
+                        "allowedMethods": [
+                          "GET",
+                          "HEAD",
+                          "OPTIONS",
+                          "PUT",
+                          "PATCH",
+                          "POST",
+                          "DELETE"
+                        ],
+                        "cachedMethods": [
+                          "GET",
+                          "HEAD",
+                          "OPTIONS"
+                        ],
+                        "cachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+                        "compress": true,
+                        "originRequestPolicyId": "216adef6-5c7f-47e4-b989-5492eafa07d3",
+                        "viewerProtocolPolicy": "redirect-to-https"
+                      },
+                      "httpVersion": "http2",
+                      "ipv6Enabled": true
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudfront.CfnDistribution",
+                  "version": "2.126.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudfront.Distribution",
               "version": "2.126.0"
             }
           },

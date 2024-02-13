@@ -69,7 +69,6 @@ class FaceMatchingStack(Stack):
             allow_all_outbound=True,
         )
         ec2_sg.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(80))
-        ec2_sg.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(443))
         ec2_sg.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(5000))  # アプリケーションのポート
 
 
@@ -144,7 +143,7 @@ class FaceMatchingStack(Stack):
             default_behavior={
                 "origin": origins.LoadBalancerV2Origin(
                     alb,
-                    protocol_policy=cloudfront.OriginProtocolPolicy.HTTPS_ONLY,  # CloudFrontからALBへのリクエストはHTTPSを使用
+                    protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY,  # CloudFrontからALBへのリクエストはHTTPを使用
                 ),
                 "viewer_protocol_policy": cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,  # ビューアーからのリクエストはHTTPSにリダイレクト
                 "allowed_methods": cloudfront.AllowedMethods.ALLOW_ALL,
