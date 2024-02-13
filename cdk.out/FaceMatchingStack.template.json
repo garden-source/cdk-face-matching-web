@@ -1,0 +1,969 @@
+{
+ "Resources": {
+  "AuthSecretC13F30CE": {
+   "Type": "AWS::SecretsManager::Secret",
+   "Properties": {
+    "GenerateSecretString": {
+     "GenerateStringKey": "password",
+     "SecretStringTemplate": "{\"username\": \"loginuser\", \"password\": \"loginpassword\"}"
+    },
+    "Name": "auth"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/AuthSecret/Resource"
+   }
+  },
+  "FaceMatchingInstanceRoleE728D1A0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ec2.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonSSMManagedInstanceCore"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatchingInstanceRole/Resource"
+   }
+  },
+  "FaceMatchingInstanceRoleDefaultPolicy8C57897D": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "secretsmanager:GetSecretValue",
+       "Effect": "Allow",
+       "Resource": "arn:aws:secretsmanager:*:*:secret:*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "FaceMatchingInstanceRoleDefaultPolicy8C57897D",
+    "Roles": [
+     {
+      "Ref": "FaceMatchingInstanceRoleE728D1A0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatchingInstanceRole/DefaultPolicy/Resource"
+   }
+  },
+  "FaceMatchingVPCC469356F": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "172.16.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-VPC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/Resource"
+   }
+  },
+  "FaceMatchingVPCPublicSubnet1SubnetB45497BE": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "ap-northeast-1a",
+    "CidrBlock": "172.16.0.0/24",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "FaceMatchingVPCC469356F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet1/Subnet"
+   }
+  },
+  "FaceMatchingVPCPublicSubnet1RouteTable8F3631D7": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "FaceMatchingVPCC469356F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet1/RouteTable"
+   }
+  },
+  "FaceMatchingVPCPublicSubnet1RouteTableAssociationA03F8CF1": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "FaceMatchingVPCPublicSubnet1RouteTable8F3631D7"
+    },
+    "SubnetId": {
+     "Ref": "FaceMatchingVPCPublicSubnet1SubnetB45497BE"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet1/RouteTableAssociation"
+   }
+  },
+  "FaceMatchingVPCPublicSubnet1DefaultRouteA4C28EDE": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "FaceMatchingVPCIGW1EB8712E"
+    },
+    "RouteTableId": {
+     "Ref": "FaceMatchingVPCPublicSubnet1RouteTable8F3631D7"
+    }
+   },
+   "DependsOn": [
+    "FaceMatchingVPCVPCGW43500BAB"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet1/DefaultRoute"
+   }
+  },
+  "FaceMatchingVPCPublicSubnet1EIP29CCE63C": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet1/EIP"
+   }
+  },
+  "FaceMatchingVPCPublicSubnet1NATGateway7D5C6E4F": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "FaceMatchingVPCPublicSubnet1EIP29CCE63C",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "FaceMatchingVPCPublicSubnet1SubnetB45497BE"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet1"
+     }
+    ]
+   },
+   "DependsOn": [
+    "FaceMatchingVPCPublicSubnet1DefaultRouteA4C28EDE",
+    "FaceMatchingVPCPublicSubnet1RouteTableAssociationA03F8CF1"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet1/NATGateway"
+   }
+  },
+  "FaceMatchingVPCPublicSubnet2Subnet598A3AF9": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "ap-northeast-1c",
+    "CidrBlock": "172.16.1.0/24",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "FaceMatchingVPCC469356F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet2/Subnet"
+   }
+  },
+  "FaceMatchingVPCPublicSubnet2RouteTable3FC669AC": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "FaceMatchingVPCC469356F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet2/RouteTable"
+   }
+  },
+  "FaceMatchingVPCPublicSubnet2RouteTableAssociation530F711F": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "FaceMatchingVPCPublicSubnet2RouteTable3FC669AC"
+    },
+    "SubnetId": {
+     "Ref": "FaceMatchingVPCPublicSubnet2Subnet598A3AF9"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet2/RouteTableAssociation"
+   }
+  },
+  "FaceMatchingVPCPublicSubnet2DefaultRoute8AB258E1": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "FaceMatchingVPCIGW1EB8712E"
+    },
+    "RouteTableId": {
+     "Ref": "FaceMatchingVPCPublicSubnet2RouteTable3FC669AC"
+    }
+   },
+   "DependsOn": [
+    "FaceMatchingVPCVPCGW43500BAB"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PublicSubnet2/DefaultRoute"
+   }
+  },
+  "FaceMatchingVPCPrivateSubnet1Subnet051C89CE": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "ap-northeast-1a",
+    "CidrBlock": "172.16.2.0/24",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-VPC/PrivateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "FaceMatchingVPCC469356F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PrivateSubnet1/Subnet"
+   }
+  },
+  "FaceMatchingVPCPrivateSubnet1RouteTableBE351FF6": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-VPC/PrivateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "FaceMatchingVPCC469356F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PrivateSubnet1/RouteTable"
+   }
+  },
+  "FaceMatchingVPCPrivateSubnet1RouteTableAssociationC03F7E83": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "FaceMatchingVPCPrivateSubnet1RouteTableBE351FF6"
+    },
+    "SubnetId": {
+     "Ref": "FaceMatchingVPCPrivateSubnet1Subnet051C89CE"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PrivateSubnet1/RouteTableAssociation"
+   }
+  },
+  "FaceMatchingVPCPrivateSubnet1DefaultRoute059544BD": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "FaceMatchingVPCPublicSubnet1NATGateway7D5C6E4F"
+    },
+    "RouteTableId": {
+     "Ref": "FaceMatchingVPCPrivateSubnet1RouteTableBE351FF6"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PrivateSubnet1/DefaultRoute"
+   }
+  },
+  "FaceMatchingVPCPrivateSubnet2Subnet2D3ADDA2": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "ap-northeast-1c",
+    "CidrBlock": "172.16.3.0/24",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-VPC/PrivateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "FaceMatchingVPCC469356F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PrivateSubnet2/Subnet"
+   }
+  },
+  "FaceMatchingVPCPrivateSubnet2RouteTable7D4F20F7": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-VPC/PrivateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "FaceMatchingVPCC469356F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PrivateSubnet2/RouteTable"
+   }
+  },
+  "FaceMatchingVPCPrivateSubnet2RouteTableAssociation2D99C003": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "FaceMatchingVPCPrivateSubnet2RouteTable7D4F20F7"
+    },
+    "SubnetId": {
+     "Ref": "FaceMatchingVPCPrivateSubnet2Subnet2D3ADDA2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PrivateSubnet2/RouteTableAssociation"
+   }
+  },
+  "FaceMatchingVPCPrivateSubnet2DefaultRouteCA7E26D7": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "FaceMatchingVPCPublicSubnet1NATGateway7D5C6E4F"
+    },
+    "RouteTableId": {
+     "Ref": "FaceMatchingVPCPrivateSubnet2RouteTable7D4F20F7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/PrivateSubnet2/DefaultRoute"
+   }
+  },
+  "FaceMatchingVPCIGW1EB8712E": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-VPC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/IGW"
+   }
+  },
+  "FaceMatchingVPCVPCGW43500BAB": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "InternetGatewayId": {
+     "Ref": "FaceMatchingVPCIGW1EB8712E"
+    },
+    "VpcId": {
+     "Ref": "FaceMatchingVPCC469356F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/VPCGW"
+   }
+  },
+  "FaceMatchingVPCRestrictDefaultSecurityGroupCustomResource37ED991B": {
+   "Type": "Custom::VpcRestrictDefaultSG",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E",
+      "Arn"
+     ]
+    },
+    "DefaultSecurityGroupId": {
+     "Fn::GetAtt": [
+      "FaceMatchingVPCC469356F",
+      "DefaultSecurityGroup"
+     ]
+    },
+    "Account": {
+     "Ref": "AWS::AccountId"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-VPC/RestrictDefaultSecurityGroupCustomResource/Default"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ],
+    "Policies": [
+     {
+      "PolicyName": "Inline",
+      "PolicyDocument": {
+       "Version": "2012-10-17",
+       "Statement": [
+        {
+         "Effect": "Allow",
+         "Action": [
+          "ec2:AuthorizeSecurityGroupIngress",
+          "ec2:AuthorizeSecurityGroupEgress",
+          "ec2:RevokeSecurityGroupIngress",
+          "ec2:RevokeSecurityGroupEgress"
+         ],
+         "Resource": [
+          {
+           "Fn::Join": [
+            "",
+            [
+             "arn:aws:ec2:ap-northeast-1:",
+             {
+              "Ref": "AWS::AccountId"
+             },
+             ":security-group/",
+             {
+              "Fn::GetAtt": [
+               "FaceMatchingVPCC469356F",
+               "DefaultSecurityGroup"
+              ]
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-1"
+     },
+     "S3Key": "dd5711540f04e06aa955d7f4862fc04e8cdea464cb590dae91ed2976bb78098e.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "__entrypoint__.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Description": "Lambda function for removing all inbound/outbound rules from the VPC default security group"
+   },
+   "DependsOn": [
+    "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.dd5711540f04e06aa955d7f4862fc04e8cdea464cb590dae91ed2976bb78098e",
+    "aws:asset:property": "Code"
+   }
+  },
+  "FaceMatchingEC2Sg9A313AFF": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "FaceMatchingStack/FaceMatching-EC2-Sg",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "from 0.0.0.0/0:80",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     },
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "from 0.0.0.0/0:443",
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     },
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "from 0.0.0.0/0:5000",
+      "FromPort": 5000,
+      "IpProtocol": "tcp",
+      "ToPort": 5000
+     }
+    ],
+    "VpcId": {
+     "Ref": "FaceMatchingVPCC469356F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-EC2-Sg/Resource"
+   }
+  },
+  "FaceMatchingEC2InstanceProfileD98AB395": {
+   "Type": "AWS::IAM::InstanceProfile",
+   "Properties": {
+    "Roles": [
+     {
+      "Ref": "FaceMatchingInstanceRoleE728D1A0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-EC2/InstanceProfile"
+   }
+  },
+  "FaceMatchingEC224380323": {
+   "Type": "AWS::EC2::Instance",
+   "Properties": {
+    "AvailabilityZone": "ap-northeast-1a",
+    "IamInstanceProfile": {
+     "Ref": "FaceMatchingEC2InstanceProfileD98AB395"
+    },
+    "ImageId": "ami-012261b9035f8f938",
+    "InstanceType": "t2.micro",
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "FaceMatchingEC2Sg9A313AFF",
+       "GroupId"
+      ]
+     }
+    ],
+    "SubnetId": {
+     "Ref": "FaceMatchingVPCPrivateSubnet1Subnet051C89CE"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "FaceMatchingStack/FaceMatching-EC2"
+     }
+    ],
+    "UserData": {
+     "Fn::Base64": "#!/bin/bash\nsudo dnf update -y\nsudo dnf install -y postgresql15\nsudo dnf install -y git docker\nsudo systemctl start docker\nsudo systemctl enable docker\nsudo usermod -aG docker ec2-user\nexport AWS_DEFAULT_REGION=ap-northeast-1\ncd /home/ec2-user"
+    }
+   },
+   "DependsOn": [
+    "FaceMatchingInstanceRoleDefaultPolicy8C57897D",
+    "FaceMatchingInstanceRoleE728D1A0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-EC2/Resource"
+   }
+  },
+  "FaceMatchingALBSgE3C2EE17": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "FaceMatchingStack/FaceMatching-ALB-Sg",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow from anyone on port 80",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     }
+    ],
+    "VpcId": {
+     "Ref": "FaceMatchingVPCC469356F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-ALB-Sg/Resource"
+   }
+  },
+  "FaceMatchingALBSgfromFaceMatchingStackFaceMatchingEC2Sg39DA7FD78069C55F49": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "from FaceMatchingStackFaceMatchingEC2Sg39DA7FD7:80",
+    "FromPort": 80,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "FaceMatchingALBSgE3C2EE17",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "FaceMatchingEC2Sg9A313AFF",
+      "GroupId"
+     ]
+    },
+    "ToPort": 80
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-ALB-Sg/from FaceMatchingStackFaceMatchingEC2Sg39DA7FD7:80"
+   }
+  },
+  "FaceMatchingALB9EF8E688": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     },
+     {
+      "Key": "access_logs.s3.enabled",
+      "Value": "true"
+     },
+     {
+      "Key": "access_logs.s3.bucket",
+      "Value": {
+       "Ref": "WEB3souLogBucketFF9DC69A"
+      }
+     },
+     {
+      "Key": "access_logs.s3.prefix",
+      "Value": ""
+     }
+    ],
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "FaceMatchingALBSgE3C2EE17",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Ref": "FaceMatchingVPCPublicSubnet1SubnetB45497BE"
+     },
+     {
+      "Ref": "FaceMatchingVPCPublicSubnet2Subnet598A3AF9"
+     }
+    ],
+    "Type": "application"
+   },
+   "DependsOn": [
+    "FaceMatchingVPCPublicSubnet1DefaultRouteA4C28EDE",
+    "FaceMatchingVPCPublicSubnet1RouteTableAssociationA03F8CF1",
+    "FaceMatchingVPCPublicSubnet2DefaultRoute8AB258E1",
+    "FaceMatchingVPCPublicSubnet2RouteTableAssociation530F711F",
+    "WEB3souLogBucketPolicy345A6A0F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-ALB/Resource"
+   }
+  },
+  "FaceMatchingALBListenerDAD5E16B": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "FaceMatchingALBListenerHttpTargetsGroup2D7B2FB9"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "FaceMatchingALB9EF8E688"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-ALB/Listener/Resource"
+   }
+  },
+  "FaceMatchingALBListenerHttpTargetsGroup2D7B2FB9": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckPath": "/",
+    "Port": 80,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "instance",
+    "Targets": [
+     {
+      "Id": {
+       "Ref": "FaceMatchingEC224380323"
+      },
+      "Port": 80
+     }
+    ],
+    "VpcId": {
+     "Ref": "FaceMatchingVPCC469356F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/FaceMatching-ALB/Listener/HttpTargetsGroup/Resource"
+   }
+  },
+  "WEB3souLogBucketFF9DC69A": {
+   "Type": "AWS::S3::Bucket",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/WEB-3sou-LogBucket/Resource"
+   }
+  },
+  "WEB3souLogBucketPolicy345A6A0F": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "WEB3souLogBucketFF9DC69A"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:PutObject",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "arn:aws:iam::582318560864:root"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "WEB3souLogBucketFF9DC69A",
+            "Arn"
+           ]
+          },
+          "/AWSLogs/",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          "/*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "s3:PutObject",
+       "Condition": {
+        "StringEquals": {
+         "s3:x-amz-acl": "bucket-owner-full-control"
+        }
+       },
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "delivery.logs.amazonaws.com"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "WEB3souLogBucketFF9DC69A",
+            "Arn"
+           ]
+          },
+          "/AWSLogs/",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          "/*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "s3:GetBucketAcl",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "delivery.logs.amazonaws.com"
+       },
+       "Resource": {
+        "Fn::GetAtt": [
+         "WEB3souLogBucketFF9DC69A",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/WEB-3sou-LogBucket/Policy/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/3VR32vCMBD+W3yP2XQw2KOOIcIYxY69jms86830IrmLIqX/+6jtbMfY032/uORL5nY2f7T3EzjL1G0PU0+FrXMFdzBwls9a0EVUqYChxGjr/MrN84471BiCytab4LEVrzMLntylpQNasyiwwyyGHXlsDLq5rT+OrjU/smeTpcKTy1PB/fob2oSk+A5Fd0KnD9pCJDgCpcC3cAte1lk73kBXoHiGi8kinUBxWLxmxch4C3Q36dlCFdy+QlaTo0uR9LKKIR376iPhp9q45p/UmsuIIo1BD6LkfIBtAR7YEZenua0Xx6Mnd+3xGmC7vHoY20W/+DhHosh95geP/HeIJert1iPaGHmw9TK5Q/cSPerG8Glj3jRmgxJSbMsl0VANdMf/WFkMJ9piXIKgWYig5golcdmY7KL7wHcP9snOHidfQjSNiZUqtJtufgP6i/nUmwIAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "FaceMatchingStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

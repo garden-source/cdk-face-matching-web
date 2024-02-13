@@ -1,0 +1,287 @@
+{
+  "version": "36.0.0",
+  "artifacts": {
+    "FaceMatchingStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "FaceMatchingStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "FaceMatchingStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/ap-northeast-1",
+      "properties": {
+        "templateFile": "FaceMatchingStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-ap-northeast-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-ap-northeast-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-1/8ad9c5fb50ab7667c85cd0b521193fc62d7832945f3ff8e0a3212d3a4c7d5a3b.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "FaceMatchingStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-ap-northeast-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "FaceMatchingStack.assets"
+      ],
+      "metadata": {
+        "/FaceMatchingStack/AuthSecret/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AuthSecretC13F30CE"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatchingInstanceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingInstanceRoleE728D1A0"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatchingInstanceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingInstanceRoleDefaultPolicy8C57897D"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCC469356F"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PublicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPublicSubnet1SubnetB45497BE"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PublicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPublicSubnet1RouteTable8F3631D7"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PublicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPublicSubnet1RouteTableAssociationA03F8CF1"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PublicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPublicSubnet1DefaultRouteA4C28EDE"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PublicSubnet1/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPublicSubnet1EIP29CCE63C"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PublicSubnet1/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPublicSubnet1NATGateway7D5C6E4F"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PublicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPublicSubnet2Subnet598A3AF9"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PublicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPublicSubnet2RouteTable3FC669AC"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PublicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPublicSubnet2RouteTableAssociation530F711F"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PublicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPublicSubnet2DefaultRoute8AB258E1"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PrivateSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPrivateSubnet1Subnet051C89CE"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PrivateSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPrivateSubnet1RouteTableBE351FF6"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PrivateSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPrivateSubnet1RouteTableAssociationC03F7E83"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PrivateSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPrivateSubnet1DefaultRoute059544BD"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PrivateSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPrivateSubnet2Subnet2D3ADDA2"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PrivateSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPrivateSubnet2RouteTable7D4F20F7"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PrivateSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPrivateSubnet2RouteTableAssociation2D99C003"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/PrivateSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCPrivateSubnet2DefaultRouteCA7E26D7"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCIGW1EB8712E"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCVPCGW43500BAB"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-VPC/RestrictDefaultSecurityGroupCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingVPCRestrictDefaultSecurityGroupCustomResource37ED991B"
+          }
+        ],
+        "/FaceMatchingStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+          }
+        ],
+        "/FaceMatchingStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-EC2-Sg/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingEC2Sg9A313AFF"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-EC2/InstanceProfile": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingEC2InstanceProfileD98AB395"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-EC2/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingEC224380323"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-ALB-Sg/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingALBSgE3C2EE17"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-ALB-Sg/from FaceMatchingStackFaceMatchingEC2Sg39DA7FD7:80": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingALBSgfromFaceMatchingStackFaceMatchingEC2Sg39DA7FD78069C55F49"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-ALB/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingALB9EF8E688"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-ALB/Listener/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingALBListenerDAD5E16B"
+          }
+        ],
+        "/FaceMatchingStack/FaceMatching-ALB/Listener/HttpTargetsGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FaceMatchingALBListenerHttpTargetsGroup2D7B2FB9"
+          }
+        ],
+        "/FaceMatchingStack/WEB-3sou-LogBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WEB3souLogBucketFF9DC69A"
+          }
+        ],
+        "/FaceMatchingStack/WEB-3sou-LogBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WEB3souLogBucketPolicy345A6A0F"
+          }
+        ],
+        "/FaceMatchingStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/FaceMatchingStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/FaceMatchingStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "FaceMatchingStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
